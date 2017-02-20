@@ -1,0 +1,64 @@
+
+    <ion-pane ng-controller="ListController">
+ <ion-view view-title = "Event Calendar">
+   <ion-nav-buttons side="primary">
+        <button
+        class="button button-icon ion-minus-circled" ng-click="data.artists.showDelete = !data.artists.showDelete;
+        data.artists.showReorder = false ;"
+        ></button>
+        </ion-nav-buttons>
+         <ion-nav-buttons side="secondary">
+        <button
+        class="button button-icon ion-navicon" ng-click="data.artists.showReorder = !data.artists.showReorder;
+        data.artists.howDelete = false";
+        ></button>
+  </ion-nav-buttons>
+      <div class="bar bar-subheader item-input-inset bar-light" >
+        <label class="item-input-wrapper">
+          <i class="icon ion-search placeholder-icon"></i>
+           <input type="search" ng-model="query" placeholder="Search">
+
+        </label>
+      </div>
+      <!-- reodering data !-->
+        <ion-content  class="has-subheader" >
+          <ion-refresher on-refresh="doRefresher()">
+          </ion-refresher>
+          <!--ng-class ="'star':item.start" the ng-class assignent a class to star when item.star is true !-->
+         <ion-list
+           show-delete = data.artists.showDelete
+           show-reorder="data.artists.showReorder" >
+           <ion-item ng-class="{'star':item.star}"
+            ng-repeat ='item in artists | filter:query' class="item-thumbnail-left  item-icon-right
+             item-text-wrap"
+            href="#/tab/list/{{item.shortname}}">
+             <img ng-src="img/{{item.shortname}}_tn.jpg" alt ="{{item.name}}Photo"></img>
+             <h2>{{item.name}}</h2>
+             <h3>{{item.reknown}}</h3>
+             <!--filter item text to 100 means less line, if is longer than 150 otherwisw show ... !-->
+             <p>{{item.bio|limitTo: 100}}{{item.bio.length > 150 ?'&hellip;':''}}</p>
+             <!--show add  start on the selected item !-->
+             <button class="button button-clear icon ion-star button-assertive"
+             ng-click="toggleStar(item)" ng-show = "item.star">
+            </button>
+            <!-- buton to swipe the item to show the star !-->
+            <ion-option-button class="button-dark"
+              ng-click="toggleStar(item)">
+            <i class="icon ion-star"></i>
+           </ion-option-button>
+             <!--created delete button here!-->
+             <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
+
+             </ion-delete-button>
+            <!--reoder button here !-->
+             <ion-reorder-button class="ion-navicon"
+             on-reorder= "moveItem(item,$fromIndex,$toIndex)">
+
+             </ion-reorder-button>
+           </ion-item>
+
+         </ion-list>
+
+        </ion-content>
+        </ion-view>
+    </ion-pane>
